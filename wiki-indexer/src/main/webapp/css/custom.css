@@ -1,0 +1,54 @@
+body {
+    background-color: #fbfbfb;
+    font-family: "Helvetica Neue",sans-serif;
+}
+
+.main-content-holder {
+    margin-top: 26px;
+}
+
+.container > div {
+    margin-bottom: 15px;
+}
+
+.input-holder {
+    margin-right: 0 !important;
+    margin-left: 0
+}
+
+.chart-holder {
+    margin-top: 22px;
+}
+
+.table-holder {
+    padding-top: 30px;
+}
+
+.white-box {
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    margin-bottom: 15px;
+    padding-bottom: 25px;
+}
+
+.table td:first-child, .table th:first-child {
+    padding-left: 15px;
+}
+
+.btn {
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    text-transform: uppercase;
+}
+
+#myFileField {
+    height: 20%;
+}
+
+.file-upload input[type="text"] {
+    background-color: #FFFFFF;
+}
+
+.titles {
+    word-wrap: break-word;
+}

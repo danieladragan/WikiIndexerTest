@@ -1,0 +1,30 @@
+<div class="row white-box" ng-show="showContent">
+    <div class="col-md-7 chart-holder">
+        <zingchart id = "topWordsChart" zc-json = "topWordsChartJson" zc-height = 500 zc-width = 800 ></zingchart>
+    </div>
+    <div class="col-md-offset-1 col-md-4 table-holder">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Word</th>
+                <th>Occurrences</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="wordElem in response.wordsList">
+                <tr>
+                    <td>{{wordElem.word}}</td>
+                    <td>{{wordElem.occurrences}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="titles">
+            <strong>Title(s) : </strong> {{titles}}
+        </div>
+        <div>
+            <strong>Duration : </strong> {{response.duration}} ms
+        </div>
+        <div>
+            <strong>Source : </strong> {{response.source}}
+        </div>
+    </div>
+</div>
