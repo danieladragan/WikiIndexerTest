@@ -23,7 +23,6 @@
 				<div class="col-md-2">
 					<button class="btn btn-primary" ng-click="searchArticle(title)">Search</button>
 				</div>
-
 				<!--File Upload-->
 				<div class="col-md-4">
 					<div class="input-group file-upload">
@@ -38,6 +37,18 @@
 				<div class="col-md-2">
 					<button ng-click="uploadFile()" class = "btn btn-primary">Upload File</button>
 				</div>
+				<!--Word search-->
+				<div class="col-md-4"></div>
+				<div class="col-md-4"></div>
+				<div class="col-md-4"></div>
+				<div class="col-md-4">
+					<input class="form-control input-xs" type="text" placeholder="Search word from Article:" name="input"
+						   ng-model="word" ng-pattern="example.word" required ng-trim="true">
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary" ng-click="searchWord(title,word); searchArticle(title)">Search word</button>
+				</div>
+
 			</div>
 		</div>
 

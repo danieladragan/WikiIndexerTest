@@ -33,7 +33,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     WikiArticleService wikiArticleService;
 
     @Override
-    public ArticleDTO getWordsByFrequency(String articleName, int numberOfWords) {
+    public ArticleDTO getWordsByFrequency(String articleName) {
         long startTime, endTime;
         articleParserService.refreshWordMap();
 
@@ -48,7 +48,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
             articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
 
             Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName);
-            articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+            articleDTO.setWordsList(getTopWords(wordFrequency, 10));
             if (wordFrequency.size() > 0) {
                 wikiArticleService.saveArticle(articleDTO);
             }
@@ -62,7 +62,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
                 wordFrequency.put(element.getWord(),element.getWordCount());
             }
 
-            articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+            articleDTO.setWordsList(getTopWords(wordFrequency, 10));
         }
 
         endTime = System.currentTimeMillis();
@@ -73,7 +73,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     }
 
     @Override
-    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames, int numberOfWords) {
+    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
         long startTime, endTime;
         articleParserService.refreshWordMap();
         startTime = System.currentTimeMillis();
@@ -98,7 +98,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         //Get the map with words aggregated from all the articles
         Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
 
-        articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+        articleDTO.setWordsList(getTopWords(wordFrequency, 10));
 
         endTime = System.currentTimeMillis();
 

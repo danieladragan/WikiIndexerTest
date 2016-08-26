@@ -17,6 +17,12 @@ public class ArticleDTO {
 
     private String source;
 
+    private WordDTO wordDTO;
+
+    public ArticleDTO() {
+        wordDTO = null;
+    }
+
     public List<String> getTitles() {
         return titles;
     }
@@ -60,6 +66,14 @@ public class ArticleDTO {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public WordDTO getWordDTO() {
+        return wordDTO;
+    }
+
+    public void setWordDTO(WordDTO wordDTO) {
+        this.wordDTO = wordDTO;
     }
 
     @Override

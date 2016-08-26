@@ -7,6 +7,10 @@
         return $resource('wiki-indexer?title=:title', {}, {
             query: {method: 'GET', params: {title: "@title"}, isArray: false}
         });
+    }).factory('SearchWordFactory', function ($resource) {
+        return $resource('wiki-indexer/search?word=:word&title=:title', {}, {
+            query: {method: 'GET', params: {word: "@word", title: "@title"}, isArray: false}
+        });
     }).factory('FileUploadFactory', function ($http, $q) {
         return {
             uploadFileToUrl: function (file, uploadUrl) {

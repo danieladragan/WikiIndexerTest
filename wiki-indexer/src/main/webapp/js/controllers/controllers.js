@@ -5,7 +5,7 @@
 
     var controllers = angular.module('wikiIndexerApp.controllers', [ 'zingchart-angularjs']);
 
-    controllers.controller('IndexController', ['$scope', 'WordIndexFactory', 'FileUploadFactory', function ($scope, WordIndexFactory, FileUploadFactory) {
+    controllers.controller('IndexController', ['$scope', 'WordIndexFactory', 'FileUploadFactory','SearchWordFactory', function ($scope, WordIndexFactory, FileUploadFactory, SearchWordFactory ) {
         $scope.searchArticle = function (title) {
             var labels =[];
             var dataSeries = [];
@@ -17,7 +17,7 @@
                     dataSeries.push(data.wordsList[key].occurrences);
                 }
             });
-            
+
             $scope.topWordsChartJson = {
                 type : "bar",
                 "title": {
@@ -35,9 +35,10 @@
                     }
                 ]
             };
+            $scope.showContent = false;
             $scope.showContent = true;
         };
-        
+
         //FileUpload
 
         $scope.uploadFile = function () {
@@ -71,6 +72,16 @@
                 $scope.serverResponse = 'An error has occurred';
             });
             $scope.showContent = true;
+        };
+
+        //Search word
+        $scope.searchWord = function (title, word) {
+            $scope.response = SearchWordFactory.query({title: title, word: word});
+            $scope.response.$promise.then(function(data) {
+                    $scope.word = data.wordDTO.word;
+                    $scope.occurrences = data.wordDTO.occurrences;
+                    $scope.showWord = true;
+            });
         };
 
     }]);

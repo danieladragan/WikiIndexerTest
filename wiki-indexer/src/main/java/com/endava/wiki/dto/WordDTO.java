@@ -8,6 +8,8 @@ public class WordDTO {
 
     private int occurrences;
 
+    public WordDTO() {}
+
     public WordDTO(String word, int occurrences) {
         this.word = word;
         this.occurrences = occurrences;
