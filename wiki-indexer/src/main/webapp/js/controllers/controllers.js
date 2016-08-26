@@ -7,6 +7,7 @@
 
     controllers.controller('IndexController', ['$scope', 'WordIndexFactory', 'FileUploadFactory','SearchWordFactory', function ($scope, WordIndexFactory, FileUploadFactory, SearchWordFactory ) {
         $scope.searchArticle = function (title) {
+            $scope.showWord = false;
             var labels =[];
             var dataSeries = [];
             $scope.response = WordIndexFactory.query({title: title});
@@ -35,7 +36,6 @@
                     }
                 ]
             };
-            $scope.showContent = false;
             $scope.showContent = true;
         };
 
