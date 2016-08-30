@@ -6,6 +6,7 @@ import com.endava.wiki.models.WordFrequencyEntity;
 import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WikiArticleService;
 import com.endava.wiki.service.WordFrequencyService;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,8 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     public ArticleDTO getWordsByFrequency(String articleName) {
         long startTime, endTime;
         articleParserService.refreshWordMap();
+
+        articleName = WordUtils.capitalizeFully(articleName);
 
         startTime = System.currentTimeMillis();
 
