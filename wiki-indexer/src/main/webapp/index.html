@@ -55,8 +55,9 @@
                         </div>
                     </form>
                 </div>
-                <!--File Upload-->
 
+
+                <!--File Upload-->
                 <form>
                     <div class="col-md-4">
                         <div class="input-group file-upload">
@@ -64,7 +65,7 @@
                     <span class="btn btn-success">
                         Choose file&hellip; <input type="file" ng-model="uploadedFile" demo-file-model="myFile"
                                                    class="form-control" id="myFileField" style="display: none;"
-                                                   onchange="validateFile(this);">
+                                                   onchange="validateFile(this);" accept="text/plain">
                     </span>
                             </label>
                             <p name="Errors"></p>
