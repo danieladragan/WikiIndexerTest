@@ -6,7 +6,6 @@ import com.endava.wiki.service.FindWordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -19,12 +18,15 @@ public class FindWordServiceImpl implements FindWordService {
     ArticleParserService articleParserService;
 
     public WordDTO findWord(String wordToBeFound, String title) {
+
+        String newTitle = title.replaceAll(" ","_");
+
+
         WordDTO wordDTO = new WordDTO();
 
         articleParserService.refreshWordMap();
 
-        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(title);
-
+        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(newTitle);
 
         Integer occurences = wordFrequency.get(wordToBeFound);
         if( occurences == null){
