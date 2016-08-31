@@ -3,7 +3,6 @@ package com.endava.wiki.dto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by aancuta on 8/10/2016.
