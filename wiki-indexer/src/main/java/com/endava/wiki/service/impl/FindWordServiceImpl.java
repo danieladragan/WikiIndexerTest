@@ -21,10 +21,11 @@ public class FindWordServiceImpl implements FindWordService {
     public WordDTO findWord(String wordToBeFound, String title) {
         WordDTO wordDTO = new WordDTO();
 
+        wordToBeFound = wordToBeFound.toLowerCase();
+
         articleParserService.refreshWordMap();
 
         Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(title);
-
 
         Integer occurences = wordFrequency.get(wordToBeFound);
         if( occurences == null){

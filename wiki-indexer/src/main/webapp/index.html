@@ -64,7 +64,7 @@
                     <span class="btn btn-success">
                         Choose file&hellip; <input type="file" ng-model="uploadedFile" demo-file-model="myFile"
                                                    class="form-control" id="myFileField" style="display: none;"
-                                                   accept="text/plain">
+                                                   onchange="validateFile(this);">
                     </span>
                             </label>
                             <p name="Errors"></p>
@@ -78,7 +78,6 @@
                 </form>
             </div>
         </div>
-
 
         <div ng-view>
 
@@ -99,6 +98,7 @@
 <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 <script src="https://cdn.zingchart.com/angular/zingchart-angularjs.js"></script>
 
+<script type="text/javascript" src="js/ValidateFileUpload.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/services/services.js"></script>
 <script type="text/javascript" src="js/controllers/controllers.js"></script>
@@ -110,4 +110,8 @@
 </script>
 
 </body>
+
+
+
 </html>
+
