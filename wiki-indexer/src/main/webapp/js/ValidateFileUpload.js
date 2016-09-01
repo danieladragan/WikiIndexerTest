@@ -13,8 +13,8 @@ function validateFile(oInput) {
             }
 
             if (!blnValid) {
-                alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
                 oInput.value = "";
+                document.getElementById("errorText").innerHTML = "* Please insert a valid .txt file!";
                 return false;
             }
         }

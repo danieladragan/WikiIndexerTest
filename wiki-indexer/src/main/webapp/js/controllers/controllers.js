@@ -26,7 +26,14 @@ function validate(string) {
                         labels.push(data.wordsList[key].word);
                         dataSeries.push(data.wordsList[key].occurrences);
                     }
-
+                    $scope.listSize = dataSeries.length;
+                    if( $scope.listSize > 0){
+                        $scope.showContent = true;
+                        $scope.showError = false;
+                    }else{
+                        $scope.showContent = false;
+                        $scope.showError = true;
+                    }
                 });
             }
 
@@ -47,7 +54,6 @@ function validate(string) {
                     }
                 ]
             };
-            $scope.showContent = true;
         };
 
         //FileUpload

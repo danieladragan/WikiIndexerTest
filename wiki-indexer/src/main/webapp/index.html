@@ -17,7 +17,7 @@
     <div class="container ng-hide" ng-show="initialized" ng-controller="IndexController">
         <div>
             <h2>Wiki Indexer Of Awesomeness</h2>
-            <div class="moveRight" >Search Word: <input type="checkbox" ng-model="mode"></div>
+            <div class="moveRight">Search Word: <input type="checkbox" ng-model="mode"></div>
             <div class="row input-holder">
 
                 <div ng-show="mode">
@@ -76,8 +76,16 @@
                     <div class="col-md-2">
                         <button ng-click="uploadFile()" class="btn btn-primary moveDown">Upload File</button>
                     </div>
+                    <div id="fileError"><p id="errorText"></p></div>
                 </form>
             </div>
+        </div>
+
+        <div ng-show="showError">
+            <h3>Wikipedia does not have an article with that title.
+                Insert a different title and try again.
+            </h3>
+
         </div>
 
         <div ng-view>
@@ -111,8 +119,4 @@
 </script>
 
 </body>
-
-
-
 </html>
-
