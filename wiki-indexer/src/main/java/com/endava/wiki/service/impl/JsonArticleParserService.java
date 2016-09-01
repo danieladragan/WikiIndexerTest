@@ -39,7 +39,7 @@ public class JsonArticleParserService implements ArticleParserService {
     }
 
     @Override
-    public Map<String, Integer> countWordsInArticle(String articleName) {
+    public Map<String, Integer> countWordsInArticle(String articleName, boolean all) {
         try {
             JsonElement jsonElement = new JsonParser()
                     .parse(new InputStreamReader(httpRequestService.getContent(articleName)));
@@ -64,9 +64,12 @@ public class JsonArticleParserService implements ArticleParserService {
                             for (String word : tokens) {
                                 word = word.toLowerCase();
                                 // Add words to the map
-                                if (!CommonWordsContainer.isCommonWord(word) && !word.equals("")) {
+                                if((all & !CommonWordsContainer.isCommonWord(word)) && !word.equals("")){
                                     workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
                                 }
+//                                if (!CommonWordsContainer.isCommonWord(word) && !word.equals("")) {
+//                                    workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
+//                                }
                             }
                         }
                     } catch (IOException ex) {

@@ -49,8 +49,9 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         if(dbArticle == null){
             articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
+            boolean countCommonWords = false;
 
-            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName);
+            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName, countCommonWords);
             articleDTO.setWordsList(getTopWords(wordFrequency, 10));
             if (wordFrequency.size() > 0) {
                 wikiArticleService.saveArticle(articleDTO);
@@ -87,9 +88,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Process multiple titles using multithreading
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        boolean countCommonWords = false;
 
         articleNames.forEach(articleName ->
-                executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
+                executorService.execute(() -> articleParserService.countWordsInArticle(articleName, countCommonWords)));
 
         try {
             executorService.shutdown();

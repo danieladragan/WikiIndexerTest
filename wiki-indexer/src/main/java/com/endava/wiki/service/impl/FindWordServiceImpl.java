@@ -6,7 +6,6 @@ import com.endava.wiki.service.FindWordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -23,7 +22,9 @@ public class FindWordServiceImpl implements FindWordService {
 
         articleParserService.refreshWordMap();
 
-        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(title);
+        boolean countCommonWords = true;
+
+        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(title, countCommonWords);
 
 
         Integer occurences = wordFrequency.get(wordToBeFound);
