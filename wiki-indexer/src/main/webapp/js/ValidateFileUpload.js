@@ -4,6 +4,7 @@ function validateFile(oInput) {
         var sFileName = oInput.value;
         if (sFileName.length > 0) {
             var blnValid = false;
+            document.getElementById("errorText").innerHTML = "";
             for (var j = 0; j < _validFileExtensions.length; j++) {
                 var sCurExtension = _validFileExtensions[j];
                 if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
