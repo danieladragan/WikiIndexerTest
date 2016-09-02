@@ -10,6 +10,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,11 +48,23 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setTitles(articleName);
 
-        if(dbArticle == null){
-            articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
-            boolean countCommonWords = false;
+        if (dbArticle != null) {
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal1.setTime(dbArticle.getDate());
+            cal2.setTime (new Timestamp(System.currentTimeMillis()));
 
-            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName, countCommonWords);
+            if (Math.abs(cal1.get(Calendar.MILLISECOND) - cal2.get(Calendar.MILLISECOND )) > 30) {
+                wikiArticleService.deleteArticle(dbArticle);
+                dbArticle = null;
+            }
+        }
+
+        if(dbArticle == null){
+            //articleDTO.setDate(new Timestamp(System.currentTimeMillis()));
+            articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
+
+            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName);
             articleDTO.setWordsList(getTopWords(wordFrequency, 10));
             if (wordFrequency.size() > 0) {
                 wikiArticleService.saveArticle(articleDTO);
@@ -76,6 +89,41 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         return articleDTO;
     }
 
+//    @Override
+//    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
+//        long startTime, endTime;
+//        articleParserService.refreshWordMap();
+//        startTime = System.currentTimeMillis();
+//
+//        ArticleDTO articleDTO = new ArticleDTO();
+//        articleDTO.setTitles(articleNames);
+//        articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
+//
+//        //Process multiple titles using multithreading
+//        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+//
+//        articleNames.forEach(articleName ->
+//            executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
+//
+//        try {
+//            executorService.shutdown();
+//            executorService.awaitTermination(WAITING_TIME_SECONDS, TimeUnit.SECONDS);
+//        } catch (InterruptedException e) {
+//            // empty body
+//        }
+//
+//        //Get the map with words aggregated from all the articles
+//        Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
+//
+//        articleDTO.setWordsList(getTopWords(wordFrequency, 10));
+//
+//        endTime = System.currentTimeMillis();
+//
+//        articleDTO.setDuration((int)(endTime - startTime));
+//
+//        return articleDTO;
+//    }
+
     @Override
     public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
         long startTime, endTime;
@@ -88,10 +136,9 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Process multiple titles using multithreading
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        boolean countCommonWords = false;
 
         articleNames.forEach(articleName ->
-                executorService.execute(() -> articleParserService.countWordsInArticle(articleName, countCommonWords)));
+                executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
 
         try {
             executorService.shutdown();
@@ -119,6 +166,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
      * @param numberOfWords Number of elements to include in the returned map
      * @return  Map
      */
+
     private Map<String, Integer> getTopWords(Map<String, Integer> allWords, int numberOfWords) {
         return allWords.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class WikiServiceArticleImpl implements WikiArticleService {
         List<WordDTO> wordsList = articleDTO.getWordsList();
 
         List<WordFrequencyEntity> wordFrequencyEntities = new ArrayList<>();
+        wikiArticleEntity.setDate(new Timestamp(System.currentTimeMillis()));
 
         wikiArticleRepository.save(wikiArticleEntity);
 
@@ -59,5 +61,13 @@ public class WikiServiceArticleImpl implements WikiArticleService {
         wikiArticleEntity.setWords(wordFrequencyEntities);
 
         wikiArticleRepository.save(wikiArticleEntity);
+    }
+
+    @Override
+    public void deleteArticle(WikiArticleEntity wikiArticleEntity){
+        for (WordFrequencyEntity word : wikiArticleEntity.getWords()) {
+            wordFrequencyEntityService.deteleWordFrequency(word);
+        }
+        wikiArticleRepository.delete(wikiArticleEntity);
     }
 }

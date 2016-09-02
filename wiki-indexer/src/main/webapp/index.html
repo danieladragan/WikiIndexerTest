@@ -17,7 +17,7 @@
     <div class="container ng-hide" ng-show="initialized" ng-controller="IndexController">
         <div>
             <h2>Wiki Indexer Of Awesomeness</h2>
-            <div class="moveRight">Search Word: <input type="checkbox" ng-model="mode"></div>
+            <div class="moveRight" >Search Word: <input type="checkbox" ng-model="mode"></div>
             <div class="row input-holder">
 
                 <div ng-show="mode">
@@ -55,9 +55,8 @@
                         </div>
                     </form>
                 </div>
-
-
                 <!--File Upload-->
+
                 <form>
                     <div class="col-md-4">
                         <div class="input-group file-upload">
@@ -65,7 +64,7 @@
                     <span class="btn btn-success">
                         Choose file&hellip; <input type="file" ng-model="uploadedFile" demo-file-model="myFile"
                                                    class="form-control" id="myFileField" style="display: none;"
-                                                   onchange="validateFile(this);" accept="text/plain">
+                                                   accept="text/plain">
                     </span>
                             </label>
                             <p name="Errors"></p>
@@ -76,7 +75,6 @@
                     <div class="col-md-2">
                         <button ng-click="uploadFile()" class="btn btn-primary moveDown">Upload File</button>
                     </div>
-                    <div id="fileError"><p id="errorText"></p></div>
                 </form>
             </div>
         </div>
@@ -107,7 +105,6 @@
 <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
 <script src="https://cdn.zingchart.com/angular/zingchart-angularjs.js"></script>
 
-<script type="text/javascript" src="js/ValidateFileUpload.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/services/services.js"></script>
 <script type="text/javascript" src="js/controllers/controllers.js"></script>

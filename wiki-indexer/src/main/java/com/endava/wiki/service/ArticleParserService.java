@@ -12,7 +12,7 @@ public interface ArticleParserService {
      * @param articleName Title of an wikipedia article
      * @return Map
      */
-    Map<String, Integer> countWordsInArticle(String articleName, boolean all);
+    Map<String, Integer> countWordsInArticle(String articleName);
 
     /**
      * Returns a map with words and their number of occurrences
@@ -24,4 +24,5 @@ public interface ArticleParserService {
      * Instantiate an empty map to hold the words and their number of occurrences
      */
     void refreshWordMap();
+
 }

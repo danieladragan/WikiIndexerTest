@@ -1,3 +1,4 @@
-Romania
-Spain
-China
+apple
+peach
+java
+laptop

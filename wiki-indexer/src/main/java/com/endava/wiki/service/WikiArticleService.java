@@ -9,4 +9,5 @@ import com.endava.wiki.models.WikiArticleEntity;
 public interface WikiArticleService {
     WikiArticleEntity findByTitle(String title);
     void saveArticle(ArticleDTO articleDTO);
+    void deleteArticle(WikiArticleEntity wikiArticleEntity);
 }

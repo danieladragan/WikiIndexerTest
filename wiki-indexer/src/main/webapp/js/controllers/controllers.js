@@ -1,3 +1,11 @@
+function validate(string) {
+    if (string.length == 0) {
+        return false;
+    }
+
+    return true;
+}
+
 (function () {
     'use strict';
 

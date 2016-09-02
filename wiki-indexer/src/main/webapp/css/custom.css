@@ -52,13 +52,6 @@ body {
     background-color: #FFFFFF;
 }
 
-#fileError {
-    margin-left: 60%;
-    color: red;
-    width: 20%;
-    padding: 10px;
-}
-
 .moveUp {
     position: relative;
     bottom: 5px;

@@ -14,6 +14,7 @@ public class WikiArticleEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
     private String title;
+    private java.sql.Timestamp date;
 
     @OneToMany (targetEntity = com.endava.wiki.models.WordFrequencyEntity.class, mappedBy = "article")
     private List<WordFrequencyEntity> words;
@@ -25,8 +26,6 @@ public class WikiArticleEntity {
     public void setWords(List<WordFrequencyEntity> words) {
         this.words = words;
     }
-
-
 
     public long getId() {
         return id;
@@ -46,6 +45,13 @@ public class WikiArticleEntity {
         this.title = title;
     }
 
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,8 +61,9 @@ public class WikiArticleEntity {
         WikiArticleEntity that = (WikiArticleEntity) o;
 
         if (id != that.id) return false;
-        if (!title.equals(that.title)) return false;
-        return words.equals(that.words);
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        return words != null ? words.equals(that.words) : that.words == null;
 
     }
 
@@ -64,7 +71,8 @@ public class WikiArticleEntity {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (title != null ? title.hashCode() : 0);
-
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (words != null ? words.hashCode() : 0);
         return result;
     }
 }
