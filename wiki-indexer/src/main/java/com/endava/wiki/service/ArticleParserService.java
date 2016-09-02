@@ -1,5 +1,6 @@
 package com.endava.wiki.service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Map;
 
 /**
@@ -24,5 +25,11 @@ public interface ArticleParserService {
      * Instantiate an empty map to hold the words and their number of occurrences
      */
     void refreshWordMap();
+
+    /**
+     * Returns a map that contains all the word and number of occurrences for a specified article
+     * @return
+     */
+    Map<String, Map<String, Integer>> getArticlesWordFrequency();
 
 }

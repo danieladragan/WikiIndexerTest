@@ -1,14 +1,18 @@
 package com.endava.wiki.service.impl;
 
 import com.endava.wiki.dto.ArticleDTO;
+import com.endava.wiki.dto.InArticleDTO;
 import com.endava.wiki.models.WikiArticleEntity;
 import com.endava.wiki.models.WordFrequencyEntity;
 import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WikiArticleService;
 import com.endava.wiki.service.WordFrequencyService;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -75,6 +79,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     @Override
     public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames, int numberOfWords) {
         long startTime, endTime;
+        org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WordFrequencyServiceImpl.class);
         articleParserService.refreshWordMap();
         startTime = System.currentTimeMillis();
 
@@ -97,8 +102,26 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Get the map with words aggregated from all the articles
         Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
-
         articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+
+
+        Map<String, Map<String, Integer>> articlesWordFrequency = articleParserService.getArticlesWordFrequency();
+        List<InArticleDTO> listInArticleDTO = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Integer>> entry:articlesWordFrequency.entrySet()){
+            InArticleDTO inArticleDTO = new InArticleDTO();
+
+            Map<String, Integer> values = entry.getValue();
+            String key = entry.getKey();
+
+            inArticleDTO.setTitle(key);
+            LOGGER.info(key);
+            for (Map.Entry<String, Integer> entry1:getTopWords(values, numberOfWords).entrySet()){
+                LOGGER.info(entry1.getKey());
+            }
+            inArticleDTO.setWordsList(getTopWords(values, numberOfWords));
+            listInArticleDTO.add(inArticleDTO);
+        }
+        articleDTO.setArticles(listInArticleDTO);
 
         endTime = System.currentTimeMillis();
 
