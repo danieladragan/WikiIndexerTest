@@ -1,6 +1,5 @@
 package com.endava.wiki.service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Map;
 
 /**
@@ -13,7 +12,7 @@ public interface ArticleParserService {
      * @param articleName Title of an wikipedia article
      * @return Map
      */
-    Map<String, Integer> countWordsInArticle(String articleName);
+    Map<String, Integer> countWordsInArticle(String articleName, boolean all);
 
     /**
      * Returns a map with words and their number of occurrences

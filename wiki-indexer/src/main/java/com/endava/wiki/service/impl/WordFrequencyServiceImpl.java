@@ -9,6 +9,7 @@ import com.endava.wiki.service.WikiArticleService;
 import com.endava.wiki.service.WordFrequencyService;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,11 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     WikiArticleService wikiArticleService;
 
     @Override
-    public ArticleDTO getWordsByFrequency(String articleName, int numberOfWords) {
+    public ArticleDTO getWordsByFrequency(String articleName) {
         long startTime, endTime;
         articleParserService.refreshWordMap();
+
+        articleName = WordUtils.capitalizeFully(articleName);
 
         startTime = System.currentTimeMillis();
 
@@ -50,9 +53,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         if(dbArticle == null){
             articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
+            boolean countCommonWords = false;
 
-            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName);
-            articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName, countCommonWords);
+            articleDTO.setWordsList(getTopWords(wordFrequency, 10));
             if (wordFrequency.size() > 0) {
                 wikiArticleService.saveArticle(articleDTO);
             }
@@ -66,7 +70,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
                 wordFrequency.put(element.getWord(),element.getWordCount());
             }
 
-            articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+            articleDTO.setWordsList(getTopWords(wordFrequency, 10));
         }
 
         endTime = System.currentTimeMillis();
@@ -77,7 +81,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
     }
 
     @Override
-    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames, int numberOfWords) {
+    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
         long startTime, endTime;
         org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WordFrequencyServiceImpl.class);
         articleParserService.refreshWordMap();
@@ -89,9 +93,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Process multiple titles using multithreading
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        boolean countCommonWords = false;
 
         articleNames.forEach(articleName ->
-                executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
+                executorService.execute(() -> articleParserService.countWordsInArticle(articleName, countCommonWords)));
 
         try {
             executorService.shutdown();
@@ -102,7 +107,8 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Get the map with words aggregated from all the articles
         Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
-        articleDTO.setWordsList(getTopWords(wordFrequency, numberOfWords));
+
+        articleDTO.setWordsList(getTopWords(wordFrequency, 10));
 
 
         Map<String, Map<String, Integer>> articlesWordFrequency = articleParserService.getArticlesWordFrequency();
@@ -115,10 +121,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
             inArticleDTO.setTitle(key);
             LOGGER.info(key);
-            for (Map.Entry<String, Integer> entry1:getTopWords(values, numberOfWords).entrySet()){
+            for (Map.Entry<String, Integer> entry1:getTopWords(values, 10).entrySet()){
                 LOGGER.info(entry1.getKey());
             }
-            inArticleDTO.setWordsList(getTopWords(values, numberOfWords));
+            inArticleDTO.setWordsList(getTopWords(values, 10));
             listInArticleDTO.add(inArticleDTO);
         }
         articleDTO.setArticles(listInArticleDTO);

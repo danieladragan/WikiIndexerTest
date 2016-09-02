@@ -1,7 +1,10 @@
 package com.endava.wiki.controller;
 
 import com.endava.wiki.dto.ArticleDTO;
+import com.endava.wiki.dto.WordDTO;
+import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WordFrequencyService;
+import com.endava.wiki.service.impl.FindWordServiceImpl;
 import com.endava.wiki.service.impl.ReadToArrayFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by aancuta on 8/10/2016.
@@ -29,9 +33,12 @@ public class WikiIndexerController {
     @Autowired
     ReadToArrayFileService readToArrayFileService;
 
+    @Autowired
+    FindWordServiceImpl findWordService;
+
     @RequestMapping(method = RequestMethod.GET)
     public ArticleDTO getWordFrequency(@RequestParam(value = "title") String title) {
-        return wordFrequencyService.getWordsByFrequency(title, WORDS_TO_SHOW);
+        return wordFrequencyService.getWordsByFrequency(title);
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
@@ -40,10 +47,18 @@ public class WikiIndexerController {
             File localFile =  new File(UPLOAD_LOCATION + UPLOADED_FILENAME);
             FileCopyUtils.copy(file.getBytes(), localFile);
             List<String> titles = readToArrayFileService.readLines(localFile);
-            return wordFrequencyService.getWordsByFrequencyInMultipleArticles(titles, WORDS_TO_SHOW);
+            return wordFrequencyService.getWordsByFrequencyInMultipleArticles(titles);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ArticleDTO getSearchedWord(@RequestParam(value = "word") String wordToBeSearched, @RequestParam(value = "title") String title) {
+        WordDTO wordDTO = findWordService.findWord(wordToBeSearched, title);
+        ArticleDTO articleDTO = wordFrequencyService.getWordsByFrequency(title);
+        articleDTO.setWordDTO(wordDTO);
+        return articleDTO;
     }
 }

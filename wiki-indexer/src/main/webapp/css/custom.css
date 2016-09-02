@@ -7,6 +7,9 @@ body {
     margin-top: 26px;
 }
 
+.myMargin {
+    margin-bottom: 10px;
+}
 .container > div {
     margin-bottom: 15px;
 }
@@ -57,6 +60,28 @@ body {
 
 .file-upload input[type="text"] {
     background-color: #FFFFFF;
+}
+
+#fileError {
+    margin-left: 60%;
+    color: red;
+    width: 20%;
+    padding: 10px;
+}
+
+.moveUp {
+    position: relative;
+    bottom: 5px;
+}
+
+.moveDown {
+    position: relative;
+    top: 5px;
+}
+
+.moveRight {
+    position: relative;
+    left: 55px;
 }
 
 .titles {

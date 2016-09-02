@@ -4,15 +4,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by aancuta on 8/10/2016.
  */
 public class ArticleDTO {
     private List<String> titles;
+
     private List<WordDTO> wordsList;
+
     private int duration;
+
     private String source;
     private List<InArticleDTO> articles;
 
@@ -22,6 +24,12 @@ public class ArticleDTO {
     public void setArticles(List<InArticleDTO> articles){
         this.articles = articles;
     }
+    private WordDTO wordDTO;
+
+    public ArticleDTO() {
+        wordDTO = null;
+    }
+
     public List<String> getTitles() {
         return titles;
     }
@@ -38,8 +46,9 @@ public class ArticleDTO {
 
     public void setWordsList(Map<String, Integer> words) {
         this.wordsList = new ArrayList<>();
-        for (String key: words.keySet())
+        for (String key: words.keySet()) {
             wordsList.add(new WordDTO(key, words.get(key)));
+        }
     }
 
     public List<WordDTO> getWordsList() {
@@ -64,6 +73,14 @@ public class ArticleDTO {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public WordDTO getWordDTO() {
+        return wordDTO;
+    }
+
+    public void setWordDTO(WordDTO wordDTO) {
+        this.wordDTO = wordDTO;
     }
 
     @Override
