@@ -5,7 +5,8 @@
 
     var controllers = angular.module('wikiIndexerApp.controllers', [ 'zingchart-angularjs']);
 
-    controllers.controller('IndexController', ['$rootScope', '$scope', 'WordIndexFactory', 'FileUploadFactory', function ($rootScope, $scope, WordIndexFactory, FileUploadFactory) {
+    controllers.controller('IndexController', ['$rootScope', '$scope', 'WordIndexFactory', 'FileUploadFactory', 'SearchWordFactory',
+        function ($rootScope, $scope, WordIndexFactory, FileUploadFactory, SearchWordFactory) {
 
         $scope.searchArticle = function (title) {
             $rootScope.showContentBar = false;
@@ -60,7 +61,7 @@
 
             var file = $scope.myFile;
             if (file.length != 0) {
-
+                $scope.showWord = false;
                 var uploadUrl = "wiki-indexer/file", //Url of web service
                     promise = FileUploadFactory.uploadFileToUrl(file, uploadUrl);
                 promise.then(function (response) {
