@@ -18,15 +18,15 @@ public class FindWordServiceImpl implements FindWordService {
     ArticleParserService articleParserService;
 
     public WordDTO findWord(String wordToBeFound, String title) {
-        WordDTO wordDTO = new WordDTO();
 
-        wordToBeFound = wordToBeFound.toLowerCase();
+        String newTitle = title.replaceAll(" ","_");
+
+
+        WordDTO wordDTO = new WordDTO();
 
         articleParserService.refreshWordMap();
 
-        boolean countCommonWords = true;
-
-        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(title, countCommonWords);
+        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(newTitle, true);
 
         Integer occurences = wordFrequency.get(wordToBeFound);
         if( occurences == null){
