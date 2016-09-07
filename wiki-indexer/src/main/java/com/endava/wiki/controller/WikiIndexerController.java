@@ -2,19 +2,20 @@ package com.endava.wiki.controller;
 
 import com.endava.wiki.dto.ArticleDTO;
 import com.endava.wiki.dto.WordDTO;
-import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WordFrequencyService;
 import com.endava.wiki.service.impl.FindWordServiceImpl;
 import com.endava.wiki.service.impl.ReadToArrayFileService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by aancuta on 8/10/2016.
@@ -36,7 +37,7 @@ public class WikiIndexerController {
     @Autowired
     FindWordServiceImpl findWordService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/indexate", method = RequestMethod.GET)
     public ArticleDTO getWordFrequency(@RequestParam(value = "title") String title) {
         return wordFrequencyService.getWordsByFrequency(title);
     }

@@ -7,13 +7,12 @@ import com.endava.wiki.models.WordFrequencyEntity;
 import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WikiArticleService;
 import com.endava.wiki.service.WordFrequencyService;
-import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.text.WordUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -50,6 +49,16 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setTitles(articleName);
+
+        if (dbArticle != null) {
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            if (Math.abs(dbArticle.getDate().getTime() - now.getTime()) > 10000) {
+                wikiArticleService.deleteArticle(dbArticle);
+                dbArticle = null;
+            }
+        }
 
         if(dbArticle == null){
             articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
@@ -143,6 +152,7 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
      * @param numberOfWords Number of elements to include in the returned map
      * @return  Map
      */
+
     private Map<String, Integer> getTopWords(Map<String, Integer> allWords, int numberOfWords) {
         return allWords.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())

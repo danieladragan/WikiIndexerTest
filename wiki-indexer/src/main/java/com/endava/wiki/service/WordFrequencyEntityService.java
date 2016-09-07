@@ -7,4 +7,5 @@ import com.endava.wiki.models.WordFrequencyEntity;
  */
 public interface WordFrequencyEntityService {
     void saveWordFrequency(WordFrequencyEntity wordFrequencyEntity);
+    void deteleWordFrequency (WordFrequencyEntity wordFrequencyEntity);
 }

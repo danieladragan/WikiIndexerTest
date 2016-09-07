@@ -15,6 +15,7 @@ public class InArticleDTO {
 
     private String source;
 
+
     public String getTitle() {
         return title;
     }

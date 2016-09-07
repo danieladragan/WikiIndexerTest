@@ -1,3 +1,11 @@
+function validate(string) {
+    if (string.length == 0) {
+        return false;
+    }
+
+    return true;
+}
+
 (function () {
     'use strict';
 
@@ -17,6 +25,7 @@
                 var dataSeries = [];
                 $scope.response = WordIndexFactory.query({title: title});
                 $scope.response.$promise.then(function (data) {
+                    $scope.searchDate = data.date;
                     $scope.titles = data.titles.join(",");
                     for (var key in data.wordsList) {
                         labels.push(data.wordsList[key].word);
@@ -32,6 +41,8 @@
                     }
                 });
             }
+
+
 
             $scope.topWordsChartJson = {
                 type: "bar",
@@ -51,6 +62,7 @@
                 ]
             };
 
+            console.log($scope.topWordsChartJson);
             $rootScope.showContentWord = true;
         };
 
@@ -280,13 +292,54 @@
 
         //Search word
         $scope.searchWord = function (title, word) {
+            $scope.showWord = true;
+            $rootScope.showContentBar = false;
+            $rootScope.showContentPie = false;
+
             if (title.length != 0 && word.length != 0) {
+
+                var labels = [];
+                var dataSeries = [];
                 $scope.response = SearchWordFactory.query({title: title, word: word});
                 $scope.response.$promise.then(function (data) {
                     $scope.word = data.wordDTO.word;
                     $scope.occurrences = data.wordDTO.occurrences;
-                    $scope.showWord = true;
+
+                    $scope.titles = data.titles.join(",");
+                    for (var key in data.wordsList) {
+                        labels.push(data.wordsList[key].word);
+                        dataSeries.push(data.wordsList[key].occurrences);
+                    }
+                    $scope.listSize = dataSeries.length;
+                    if( $scope.listSize > 0){
+                        $scope.showContent = true;
+                        $scope.showError = false;
+                    }else{
+                        $scope.showContent = false;
+                        $scope.showError = true;
+                    }
                 });
+
+                $scope.topWordsChartJson = {
+                    type: "bar",
+                    "title": {
+                        "text": "Top 10 Words"
+                    },
+                    backgroundColor: "white",
+                    "scale-x": {
+                        "values": labels,
+                        "itemsOverlap": 1
+                    },
+                    series: [
+                        {
+                            values: dataSeries,
+                            backgroundColor: "#6bbf19"
+                        }
+                    ]
+                };
+
+
+                $rootScope.showContentWord = true;
             }
         };
 

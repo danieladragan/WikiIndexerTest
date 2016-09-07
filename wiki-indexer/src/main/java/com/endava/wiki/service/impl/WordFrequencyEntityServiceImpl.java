@@ -18,4 +18,9 @@ public class WordFrequencyEntityServiceImpl implements WordFrequencyEntityServic
     public void saveWordFrequency(WordFrequencyEntity wordFrequencyEntity) {
         wordFrequencyRepository.save(wordFrequencyEntity);
     }
+
+    @Override
+    public void deteleWordFrequency(WordFrequencyEntity wordFrequencyEntity) {
+        wordFrequencyRepository.delete(wordFrequencyEntity);
+    }
 }
