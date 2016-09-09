@@ -2,6 +2,7 @@
 <html ng-app="wikiIndexerApp">
 <head>
     <title>Wiki Indexer</title>
+
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous" />
     <link href="css/custom.css" rel="stylesheet" />
@@ -12,7 +13,7 @@
         ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
     </script>
 </head>
-<body>
+<body ng-style="environmentObj" ng-controller="IndexController">
 <div class="loader" ng-hide="initialized">
     <p>Loading...</p>
     <p><span class="fa fa-spinner fa-spin"></span></p>
@@ -92,6 +93,7 @@
             </h3>
 
         </div>
+
 
         <div ng-view>
 

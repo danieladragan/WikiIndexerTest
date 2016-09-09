@@ -1,9 +1,6 @@
 package com.endava.wiki.dto;
 
-import java.sql.Timestamp;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,24 +18,33 @@ public class ArticleDTO {
 
     private List<InArticleDTO> articles;
 
-    public List<InArticleDTO> getArticles(){
-        return articles;
-    }
-    public void setArticles(List<InArticleDTO> articles){
-        this.articles = articles;
-    }
     private WordDTO wordDTO;
+
+    public int getMode() {
+        return envMode;
+    }
+
+    public void setMode(int mode) {
+        envMode = mode;
+    }
+
+    private int envMode;
 
     public ArticleDTO() {
         wordDTO = null;
+        envMode = 0;
+    }
+
+    public List<InArticleDTO> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<InArticleDTO> articles) {
+        this.articles = articles;
     }
 
     public List<String> getTitles() {
         return titles;
-    }
-
-    public void setTitles(List<String> titles) {
-        this.titles = titles;
     }
 
     public void setTitles(String title) {
@@ -47,9 +53,13 @@ public class ArticleDTO {
         this.titles = titles;
     }
 
+    public void setTitles(List<String> titles) {
+        this.titles = titles;
+    }
+
     public void setWordsList(Map<String, Integer> words) {
         this.wordsList = new ArrayList<>();
-        for (String key: words.keySet()) {
+        for (String key : words.keySet()) {
             wordsList.add(new WordDTO(key, words.get(key)));
         }
     }

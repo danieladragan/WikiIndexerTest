@@ -26,6 +26,7 @@ public final class CommonWordsContainer {
                 commonWords.add(word);
             }
         } catch (Exception ex) {
+            System.out.println("exception here! :(");
             ex.printStackTrace();
         }
     }
