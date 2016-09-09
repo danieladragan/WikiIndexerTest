@@ -1,12 +1,14 @@
 package com.endava.wiki.service.impl;
 
 import com.endava.wiki.dto.ArticleDTO;
+import com.endava.wiki.dto.InArticleDTO;
 import com.endava.wiki.models.WikiArticleEntity;
 import com.endava.wiki.models.WordFrequencyEntity;
 import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.WikiArticleService;
 import com.endava.wiki.service.WordFrequencyService;
 import org.apache.commons.lang3.text.WordUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,22 +51,20 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         articleDTO.setTitles(articleName);
 
         if (dbArticle != null) {
-            Calendar cal1 = Calendar.getInstance();
-            Calendar cal2 = Calendar.getInstance();
-            cal1.setTime(dbArticle.getDate());
-            cal2.setTime (new Timestamp(System.currentTimeMillis()));
 
-            if (Math.abs(cal1.get(Calendar.MILLISECOND) - cal2.get(Calendar.MILLISECOND )) > 30) {
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            if (Math.abs(dbArticle.getDate().getTime() - now.getTime()) > 10000) {
                 wikiArticleService.deleteArticle(dbArticle);
                 dbArticle = null;
             }
         }
 
         if(dbArticle == null){
-            //articleDTO.setDate(new Timestamp(System.currentTimeMillis()));
             articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
+            boolean countCommonWords = false;
 
-            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName);
+            Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(articleName, countCommonWords);
             articleDTO.setWordsList(getTopWords(wordFrequency, 10));
             if (wordFrequency.size() > 0) {
                 wikiArticleService.saveArticle(articleDTO);
@@ -89,44 +89,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         return articleDTO;
     }
 
-//    @Override
-//    public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
-//        long startTime, endTime;
-//        articleParserService.refreshWordMap();
-//        startTime = System.currentTimeMillis();
-//
-//        ArticleDTO articleDTO = new ArticleDTO();
-//        articleDTO.setTitles(articleNames);
-//        articleDTO.setSource(DATA_SOURCE_WIKIPEDIA);
-//
-//        //Process multiple titles using multithreading
-//        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-//
-//        articleNames.forEach(articleName ->
-//            executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
-//
-//        try {
-//            executorService.shutdown();
-//            executorService.awaitTermination(WAITING_TIME_SECONDS, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            // empty body
-//        }
-//
-//        //Get the map with words aggregated from all the articles
-//        Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
-//
-//        articleDTO.setWordsList(getTopWords(wordFrequency, 10));
-//
-//        endTime = System.currentTimeMillis();
-//
-//        articleDTO.setDuration((int)(endTime - startTime));
-//
-//        return articleDTO;
-//    }
-
     @Override
     public ArticleDTO getWordsByFrequencyInMultipleArticles(List<String> articleNames) {
         long startTime, endTime;
+        org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WordFrequencyServiceImpl.class);
         articleParserService.refreshWordMap();
         startTime = System.currentTimeMillis();
 
@@ -136,9 +102,10 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
 
         //Process multiple titles using multithreading
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        boolean countCommonWords = false;
 
         articleNames.forEach(articleName ->
-                executorService.execute(() -> articleParserService.countWordsInArticle(articleName)));
+                executorService.execute(() -> articleParserService.countWordsInArticle(articleName, countCommonWords)));
 
         try {
             executorService.shutdown();
@@ -151,6 +118,25 @@ public class WordFrequencyServiceImpl implements WordFrequencyService {
         Map<String, Integer> wordFrequency = articleParserService.getWordFrequency();
 
         articleDTO.setWordsList(getTopWords(wordFrequency, 10));
+
+
+        Map<String, Map<String, Integer>> articlesWordFrequency = articleParserService.getArticlesWordFrequency();
+        List<InArticleDTO> listInArticleDTO = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Integer>> entry:articlesWordFrequency.entrySet()){
+            InArticleDTO inArticleDTO = new InArticleDTO();
+
+            Map<String, Integer> values = entry.getValue();
+            String key = entry.getKey();
+
+            inArticleDTO.setTitle(key);
+            LOGGER.info(key);
+            for (Map.Entry<String, Integer> entry1:getTopWords(values, 10).entrySet()){
+                LOGGER.info(entry1.getKey());
+            }
+            inArticleDTO.setWordsList(getTopWords(values, 10));
+            listInArticleDTO.add(inArticleDTO);
+        }
+        articleDTO.setArticles(listInArticleDTO);
 
         endTime = System.currentTimeMillis();
 

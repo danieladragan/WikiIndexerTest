@@ -35,7 +35,6 @@ public class WikiServiceArticleImpl implements WikiArticleService {
 
     @Override
     public void saveArticle(ArticleDTO articleDTO) {
-
         WikiArticleEntity wikiArticleEntity = new WikiArticleEntity();
 
         wikiArticleEntity.setTitle(articleDTO.getTitles().get(0));
@@ -43,6 +42,7 @@ public class WikiServiceArticleImpl implements WikiArticleService {
 
         List<WordFrequencyEntity> wordFrequencyEntities = new ArrayList<>();
         wikiArticleEntity.setDate(new Timestamp(System.currentTimeMillis()));
+
 
         wikiArticleRepository.save(wikiArticleEntity);
 

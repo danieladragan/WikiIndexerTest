@@ -1,6 +1,7 @@
 package com.endava.wiki.dto;
 
 import java.sql.Timestamp;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,14 @@ public class ArticleDTO {
 
     private String source;
 
+    private List<InArticleDTO> articles;
+
+    public List<InArticleDTO> getArticles(){
+        return articles;
+    }
+    public void setArticles(List<InArticleDTO> articles){
+        this.articles = articles;
+    }
     private WordDTO wordDTO;
 
     public ArticleDTO() {
@@ -88,4 +97,3 @@ public class ArticleDTO {
                 '}';
     }
 }
-

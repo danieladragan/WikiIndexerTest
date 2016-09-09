@@ -26,7 +26,7 @@ public class FindWordServiceImpl implements FindWordService {
 
         articleParserService.refreshWordMap();
 
-        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(newTitle);
+        Map<String, Integer> wordFrequency = articleParserService.countWordsInArticle(newTitle, true);
 
         Integer occurences = wordFrequency.get(wordToBeFound);
         if( occurences == null){

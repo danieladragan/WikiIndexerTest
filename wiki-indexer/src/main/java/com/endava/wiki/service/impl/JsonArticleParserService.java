@@ -8,10 +8,12 @@ import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,11 +28,18 @@ public class JsonArticleParserService implements ArticleParserService {
 
     private Map<String, Integer> workFrequency;
 
+    public Map<String, Map<String, Integer>> getArticlesWordFrequency() {
+        return articlesWordFrequency;
+    }
+
+    private Map<String, Map<String, Integer>> articlesWordFrequency;
+
     @Autowired
     private HttpRequestService httpRequestService;
 
     public void refreshWordMap() {
         workFrequency = new ConcurrentHashMap<>();
+        articlesWordFrequency = new HashMap<>();
     }
 
     @Override
@@ -39,7 +48,9 @@ public class JsonArticleParserService implements ArticleParserService {
     }
 
     @Override
-    public Map<String, Integer> countWordsInArticle(String articleName) {
+    public Map<String, Integer> countWordsInArticle(String articleName, boolean countCommonWords) {
+        Map<String, Integer> articleWordFrequency = new HashMap<>();
+
         try {
             JsonElement jsonElement = new JsonParser()
                     .parse(new InputStreamReader(httpRequestService.getContent(articleName)));
@@ -49,7 +60,7 @@ public class JsonArticleParserService implements ArticleParserService {
             Set<Map.Entry<String, JsonElement>> entrySet = pages.getAsJsonObject().entrySet();
 
             JsonElement contentHolder = null;
-            for (Map.Entry<String,JsonElement> entry : entrySet) {
+            for (Map.Entry<String, JsonElement> entry : entrySet) {
                 contentHolder = entry.getValue();
             }
 
@@ -64,8 +75,15 @@ public class JsonArticleParserService implements ArticleParserService {
                             for (String word : tokens) {
                                 word = word.toLowerCase();
                                 // Add words to the map
-                                if (!CommonWordsContainer.isCommonWord(word) && !word.equals("")) {
-                                    workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
+                                if (countCommonWords == true) {
+                                    if (!word.equals("")) {
+                                        workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
+                                    }
+                                } else {
+                                    if (!word.equals("") && !CommonWordsContainer.isCommonWord(word)) {
+                                        workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
+                                        articleWordFrequency.put(word, articleWordFrequency.getOrDefault(word, 0) + 1);
+                                    }
                                 }
                             }
                         }
@@ -77,6 +95,8 @@ public class JsonArticleParserService implements ArticleParserService {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        articlesWordFrequency.put(articleName, articleWordFrequency);
         return workFrequency;
     }
 }

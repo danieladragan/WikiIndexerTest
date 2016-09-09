@@ -4,7 +4,7 @@
     var services = angular.module('wikiIndexerApp.services', ['ngResource']);
 
     services.factory('WordIndexFactory', function ($resource) {
-        return $resource('wiki-indexer?title=:title', {}, {
+        return $resource('wiki-indexer/indexate?title=:title', {}, {
             query: {method: 'GET', params: {title: "@title"}, isArray: false}
         });
     }).factory('SearchWordFactory', function ($resource) {

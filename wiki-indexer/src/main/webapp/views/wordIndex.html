@@ -1,7 +1,16 @@
-<div class="row white-box" ng-show="showContent">
-    <div class="col-md-7 chart-holder">
-        <zingchart id="topWordsChart" zc-json="topWordsChartJson" zc-height=500 zc-width=800></zingchart>
+<div class="row white-box1" >
+    <div class="col-md-8 chart-holder" ng-if="showContentWord">
+        <zingchart id = "Chart" zc-json = "topWordsChartJson" zc-height = 500 zc-width = 800 ></zingchart>
     </div>
+    <div class="col-md-7 chart-holder" ng-if="showContentBar">
+        <zingchart id = "myNextChart" zc-json = "topWordsChartJson1" zc-height = 400 zc-width = 700 ></zingchart>
+    </div>
+    <div class="col-md-4 chart-holder1" ng-if="showContentPie">
+        <zingchart id = "myChart" zc-json = "topWordsChartJson2" zc-height = 400 zc-width = 400 ></zingchart>
+    </div>
+</div>
+
+<div class="row white-box" ng-show="showContent">
     <div class="col-md-offset-1 col-md-4 table-holder">
         <table class="table table-striped">
             <thead>
@@ -11,10 +20,10 @@
             </tr>
             </thead>
             <tbody ng-repeat="wordElem in response.wordsList">
-            <tr>
-                <td>{{wordElem.word}}</td>
-                <td>{{wordElem.occurrences}}</td>
-            </tr>
+                <tr>
+                    <td>{{wordElem.word}}</td>
+                    <td>{{wordElem.occurrences}}</td>
+                </tr>
             </tbody>
         </table>
         <div class="titles">
@@ -26,10 +35,10 @@
         <div>
             <strong>Source : </strong> {{response.source}}
         </div>
+
         <div ng-show = "showWord">
         <div><strong> Word : </strong> {{word}}</div>
         <div><strong> Occurrences : </strong> {{occurrences}}</div>
         </div>
     </div>
 </div>
-

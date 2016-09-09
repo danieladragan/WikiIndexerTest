@@ -37,7 +37,7 @@ public class WikiIndexerController {
     @Autowired
     FindWordServiceImpl findWordService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/indexate", method = RequestMethod.GET)
     public ArticleDTO getWordFrequency(@RequestParam(value = "title") String title) {
         return wordFrequencyService.getWordsByFrequency(title);
     }
