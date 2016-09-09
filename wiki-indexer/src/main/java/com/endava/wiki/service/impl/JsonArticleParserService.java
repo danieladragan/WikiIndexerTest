@@ -2,7 +2,6 @@ package com.endava.wiki.service.impl;
 
 import com.endava.wiki.service.ArticleParserService;
 import com.endava.wiki.service.HttpRequestService;
-import com.endava.wiki.utils.CommonWordsContainer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -33,6 +30,14 @@ public class JsonArticleParserService implements ArticleParserService {
     }
 
     private Map<String, Map<String, Integer>> articlesWordFrequency;
+
+    private static final List<String> ignoreAll = Arrays.asList("the", "of", "a", "and", "in", "to", "are",
+            "as", "that", "is", "with", "for", "or", "they", "be", "on", "their", "have", "other", "used",
+            "from", "can", "also", "such", "were", "an", "by", "which", "in", "this", "often", "even", "had",
+            "has", "not", "been", "some", "it", "n", "many", "its", "s", "000", "nthe", "use", "frp", "but",
+            "ten", "half", "de", "at", "was", "most", "1", "u2014", "u", "san", "i", "ii", "k", "first",
+            "c", "st","his", "her","he","she", "0", "2", "3", "4", "5", "6","7","8","9",
+            "ten", "half", "de", "at", "was", "most", "1","u","san", "who", "0");
 
     @Autowired
     private HttpRequestService httpRequestService;
@@ -80,7 +85,7 @@ public class JsonArticleParserService implements ArticleParserService {
                                         workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
                                     }
                                 } else {
-                                    if (!word.equals("") && !CommonWordsContainer.isCommonWord(word)) {
+                                    if (!word.equals("") && !ignoreAll.contains(word)) {
                                         workFrequency.put(word, workFrequency.getOrDefault(word, 0) + 1);
                                         articleWordFrequency.put(word, articleWordFrequency.getOrDefault(word, 0) + 1);
                                     }
