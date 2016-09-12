@@ -45,7 +45,7 @@ public class WikiIndexerController {
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public ArticleDTO getWordFrequencyBatch(@RequestParam(value = "file") MultipartFile file) {
         try {
-            File localFile =  new File(UPLOAD_LOCATION + UPLOADED_FILENAME);
+            File localFile =  new File(UPLOADED_FILENAME);
             FileCopyUtils.copy(file.getBytes(), localFile);
             List<String> titles = readToArrayFileService.readLines(localFile);
             return wordFrequencyService.getWordsByFrequencyInMultipleArticles(titles);
